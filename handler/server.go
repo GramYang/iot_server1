@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	g "github.com/GramYang/gylog"
 	"github.com/davyxu/cellnet"
 	_ "github.com/davyxu/cellnet/codec/json"
@@ -14,26 +13,20 @@ func Handler(ev cellnet.Event) {
 		g.Debugln("server accepted")
 	case *JsonMsg:
 		g.Debugln("server recv", msg)
-		jsonHandler(ev,msg.Msg)
+		jsonHandler(ev, msg.Msg)
 	case *cellnet.SessionClosed:
 		g.Debugln("session closed: ", ev.Session().ID())
 	}
 }
 
-func jsonHandler(ev cellnet.Event,msg string){
-	resMap:=map[string]interface{}{}
-	err:=json.Unmarshal([]byte(msg),&resMap)
-	if err!=nil{
-		g.Errorln("JsonMsg Unmarshal:",err.Error())
-		return
-	}
-	if resMap["Action"]!=nil&&resMap["Action"]=="GetDeviceLogin"{
-		if resMap["DeviceName"]!=nil&&resMap["DeviceName"]!=""{
-			Login(ev,resMap["DeviceName"].(string))
-		}else{
+func jsonHandler(ev cellnet.Event, msg map[string]interface{}) {
+	if msg["Action"] != nil && msg["Action"] == "GetDeviceLogin" {
+		if msg["DeviceName"] != nil && msg["DeviceName"] != "" {
+			Login(ev, msg["DeviceName"].(string))
+		} else {
 			g.Errorln("JsonMsg missing DeviceName")
 		}
-	}else{
+	} else {
 		g.Errorln("JsonMsg missing Action")
 	}
 }

@@ -1,7 +1,0 @@
-gylog.go:280: DEBUG &{:8086 106.54.87.204 3306 cqdq cqdq12345 iot_admin true}
-gylog.go:280: DEBUG server accepted
-gylog.go:280: DEBUG buffer length: [72 0]
-gylog.go:280: DEBUG buffer type and content: [1 0 123 34 77 115 103 34 58 34 123 92 34 65 99 116 105 111 110 92 34 58 92 34 71 101 116 68 101 118 105 99 101 76 111 103 105 110 92 34 44 92 34 68 101 118 105 99 101 78 97 109 101 92 34 58 92 34 230 181 139 232 175 149 49 49 57 92 34 125 34 125]
-gylog.go:280: DEBUG server recv &{{"Action":"GetDeviceLogin","DeviceName":"测试119"}}
-gylog.go:296: ERROR Error 1054: Unknown column 'DeviceName' in 'where clause'
-gylog.go:280: DEBUG session closed:  1

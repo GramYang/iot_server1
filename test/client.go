@@ -12,9 +12,9 @@ import (
 	_ "github.com/davyxu/cellnet/proc/tcp"
 )
 
-//const peerAddress = "106.54.87.204:8086"
+const peerAddress = "106.54.87.204:8087"
 
-const peerAddress = "127.0.0.1:8086"
+//const peerAddress = "127.0.0.1:8087"
 
 func main() {
 	done := make(chan struct{})
@@ -28,8 +28,8 @@ func main() {
 			loginReq(ev)
 		//收到响应后就关闭
 		case *handler.JsonMsg:
-			fmt.Printf("client recv %+v\n", msg)
-			loginAck(ev,msg.Msg)
+			d, _ := json.Marshal(msg)
+			fmt.Printf("client recv %+v\n", string(d))
 			done <- struct{}{}
 		case *cellnet.SessionClosed:
 			fmt.Println("client closed")
@@ -40,21 +40,10 @@ func main() {
 	<-done
 }
 
-func loginReq(ev cellnet.Event){
-	msg:=map[string]interface{}{}
-	msg["Action"]="GetDeviceLogin"
-	msg["DeviceName"]="测试119"
-	data,_:=json.Marshal(msg)
-	m:=handler.JsonMsg{Msg:string(data)}
+func loginReq(ev cellnet.Event) {
+	msg := map[string]interface{}{}
+	msg["Action"] = "GetDeviceLogin"
+	msg["DeviceName"] = "测试119"
+	m := handler.JsonMsg{Msg: msg}
 	ev.Session().Send(m)
-}
-
-func loginAck(ev cellnet.Event,msg string){
-	resMap:=map[string]interface{}{}
-	_=json.Unmarshal([]byte(msg),&resMap)
-	resMap1:=map[string]interface{}{}
-	_=json.Unmarshal([]byte(resMap["Props"].(string)),&resMap1)
-	resMap2:=map[string]interface{}{}
-	_=json.Unmarshal([]byte(resMap1["Login"].(string)),&resMap2)
-	fmt.Println("parse json to map",resMap2)
 }

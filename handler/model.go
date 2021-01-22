@@ -7,7 +7,7 @@ import (
 )
 
 type JsonMsg struct {
-	Msg   string
+	Msg map[string]interface{}
 }
 
 // 将消息注册到系统
